@@ -1,3 +1,4 @@
+#articles_controller
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
@@ -10,6 +11,9 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
+    @article= Article.find(params[:id])  
+    @id= params[:id]
+    print @id
   end
 
   # GET /articles/new
@@ -19,46 +23,43 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    @article = Article.find(params[:id])
   end
 
   # POST /articles
   # POST /articles.json
+
   def create
     @article = Article.new(article_params)
 
-    respond_to do |format|
       if @article.save
-        format.html { redirect_to @article, notice: 'Article was successfully created.' }
-        format.json { render :show, status: :created, location: @article }
+        flash[:success] = "Article was successfully created"
+        redirect_to article_path(@article)
       else
-        format.html { render :new }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
+        render 'new'
       end
-    end
   end
 
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    respond_to do |format|
+    @article= Article.find(params[:id])
       if @article.update(article_params)
-        format.html { redirect_to @article, notice: 'Article was successfully updated.' }
-        format.json { render :show, status: :ok, location: @article }
+        flash[:success] = "Article was successfully updated"
+        redirect_to article_path(@article)
       else
-        format.html { render :edit }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
+        render 'edit'
       end
-    end
+    
   end
 
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
+    @article= Article.find(params[:id])
     @article.destroy
-    respond_to do |format|
-      format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:danger] = "Article was successfully updated"
+    redirect_to article_path
   end
 
   private
@@ -71,4 +72,19 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:title, :description)
     end
+    private
+
+def article_params
+
+params.require(:article).permit(:title, :description)
+
 end
+end
+
+
+# <p>
+# <%= render 'form', article: @article %>
+
+# # <%= link_to 'Show', @article %> |
+# # <%= link_to 'Back', articles_path %>
+# </p>
